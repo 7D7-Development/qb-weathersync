@@ -25,25 +25,37 @@ Synced weather and time for QB-Core Framework :sunrise:
 
 ## Features
 - Syncs the weather for all players
+  
 ```
     ## Credit: Additional Features added by: WiseByDesign - Discord: wisebydesign
 ```
+
 - Option for enabling Xmas Weather in December Automatically
 - Extra Xmas Weather Effect VFX and SFX Options
-- Player Vehicle Accumulates Snow while out in the weather and accumulates more while vehicle is in motion
-- Player Vehicle Snow will Slowly "Melt" while Inside of an Interior, but not 100%, some dirt will always remain during xmas if vehicle has been driven out in the weather
+- Player Vehicle Accumulates Snow While out in the Weather and Accumulates more While Vehicle is in Motion
+- Player Vehicle Snow will Slowly "Melt" while Inside of an Interior, but not 100%, Some Dirt will Always Remain During Xmas if Vehicle has been Driven out in the Weather
 - Player Vehicle Will Remain Clean if Spawned Clean in an Interior until Exiting and Going Out into Xmas Weather
 - Iced Lake IPL Resource Support
-- Option to add "ice chunks" to all bodies of water
+- Option to Add "ice chunks" VFX to All Bodies of Water
 - 2 New Weather Types Added: 'RAIN_HALLOWEEN' and 'SNOW_HALLOWEEN' - Instructions on How to Add to QB-AdminMenu Below
   
 - Tested on Game Builds:
 ```
 3570, 3717
 ```
+
 - Tested on Artifacts:
 ```
 22819, 22934, 23368, 23683
+```
+
+- Tested Graphics:
+```
+NVE, Vanilla (Legacy)
+```
+
+```
+    ## Credit: Additional Features added by: WiseByDesign - Discord: wisebydesign
 ```
 
 ## Installation
@@ -59,6 +71,9 @@ ensure qb-weathersync
 You can adjust available weather and defaults in `config.lua`
 to adjust weather patterns you need to modify nextWeatherStage() in `server/server.lua`
 
+```
+    ## Credit: Additional Features added by: WiseByDesign - Discord: wisebydesign
+```
 
 ## Adding New Weather Options to QB-AdminMenu Instructions:
 
@@ -106,6 +121,7 @@ SNOW_HALLOWEEN
         --------------------------------------------------
         weather_changed = 'Weather Changed To: %{value}',
 ```
+
 ```
     ## Credit: Additional Features added by: WiseByDesign - Discord: wisebydesign
 ```
