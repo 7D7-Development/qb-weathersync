@@ -45,6 +45,53 @@ ensure qb-weathersync
 You can adjust available weather and defaults in `config.lua`
 to adjust weather patterns you need to modify nextWeatherStage() in `server/server.lua`
 
+##==========New Weather Options:========================================================
+```
+RAIN_HALLOWEEN
+SNOW_HALLOWEEN
+```
+
+## Adding New Weather Options to QB-AdminMenu Instructions:
+
+`qb-adminmenu/client/client.lua`
+```
+        [15] = {
+            icon = '🎃',
+            label = Lang:t('weather.halloween'),
+            value = 'HALLOWEEN',
+            description = Lang:t('weather.halloween_desc')
+        },
+        --Copy Paste Here, MAKE SURE TO ADD COMMA AFTER CLOSING } IF NOT ALREADY THERE--
+        [16] = {
+            icon = '☂️🎃',
+            label = Lang:t('weather.halloween_rain'),
+            value = 'RAIN_HALLOWEEN',
+            description = Lang:t('weather.halloween_rain_desc')
+        },
+        [17] = {
+            icon = '❄️🎃',
+            label = Lang:t('weather.halloween_snow'),
+            value = 'SNOW_HALLOWEEN',
+            description = Lang:t('weather.halloween_snow_desc')
+        }
+        ----------------------------------------------------------
+```
+
+`qb=adminmenu/locales/en.lua`
+```
+        heavy_snow = 'Heavy Snow (XMAS)',
+        heavy_snow_desc = 'Snowball Fight!',
+        halloween = 'Halloween',
+        halloween_desc = 'What Was That Noise?!',
+        -------------------------------------------------- HERE
+        halloween_rain = 'Halloween Rain',
+        halloween_rain_desc = 'Rain, Rain, Go Away?!',
+        halloween_snow = 'Halloween Snow',
+        halloween_snow_desc = 'It is Beginning to Look a lot Like. . .',
+        --------------------------------------------------
+        weather_changed = 'Weather Changed To: %{value}',
+```
+##====================================================================================
 
 
 ## Commands
