@@ -25,6 +25,12 @@ Synced weather and time for QB-Core Framework :sunrise:
 
 ## Features
 - Syncs the weather for all players
+- Option for enabling Xmas Weather in December Automatically
+- Xmas Weather Effect Options
+
+```
+    ## Credit: Additional Xmas Features added by: WiseByDesign - Discord: wisebydesign
+```
 
 ## Installation
 ### Manual
