@@ -1,9 +1,9 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-author 'Kakarot'
+author 'Kakarot - [ Credit: Additional Xmas Features added by: WiseByDesign ] - [ Discord: wisebydesign ]'
 description 'Syncs the time & weather for all players on the server and allows editing by command'
-version '2.1.1'
+version '2.1.2'
 
 shared_scripts {
     'config.lua',
