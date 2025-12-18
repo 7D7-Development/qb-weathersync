@@ -41,7 +41,7 @@ Synced weather and time for QB-Core Framework :sunrise:
 ```
 3570, 3717
 ```
-- Testing on Artifacts:
+- Tested on Artifacts:
 ```
 22819, 22934, 23368, 23683
 ```
