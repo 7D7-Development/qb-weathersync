@@ -25,11 +25,25 @@ Synced weather and time for QB-Core Framework :sunrise:
 
 ## Features
 - Syncs the weather for all players
-- Option for enabling Xmas Weather in December Automatically
-- Xmas Weather Effect Options
-
 ```
-    ## Credit: Additional Xmas Features added by: WiseByDesign - Discord: wisebydesign
+    ## Credit: Additional Features added by: WiseByDesign - Discord: wisebydesign
+```
+- Option for enabling Xmas Weather in December Automatically
+- Extra Xmas Weather Effect VFX and SFX Options
+- Player Vehicle Accumulates Snow while out in the weather and accumulates more while vehicle is in motion
+- Player Vehicle Snow will Slowly "Melt" while Inside of an Interior, but not 100%, some dirt will always remain during xmas if vehicle has been driven out in the weather
+- Player Vehicle Will Remain Clean if Spawned Clean in an Interior until Exiting and Going Out into Xmas Weather
+- Iced Lake IPL Resource Support
+- Option to add "ice chunks" to all bodies of water
+- 2 New Weather Types Added: 'RAIN_HALLOWEEN' and 'SNOW_HALLOWEEN' - Instructions on How to Add to QB-AdminMenu Below
+  
+- Tested on Game Builds:
+```
+3570, 3717
+```
+- Testing on Artifacts:
+```
+22819, 22934, 23368, 23683
 ```
 
 ## Installation
@@ -45,13 +59,14 @@ ensure qb-weathersync
 You can adjust available weather and defaults in `config.lua`
 to adjust weather patterns you need to modify nextWeatherStage() in `server/server.lua`
 
-##==========New Weather Options:========================================================
+
+## Adding New Weather Options to QB-AdminMenu Instructions:
+
+`New Weather Options:`
 ```
 RAIN_HALLOWEEN
 SNOW_HALLOWEEN
 ```
-
-## Adding New Weather Options to QB-AdminMenu Instructions:
 
 `qb-adminmenu/client/client.lua`
 ```
@@ -91,8 +106,9 @@ SNOW_HALLOWEEN
         --------------------------------------------------
         weather_changed = 'Weather Changed To: %{value}',
 ```
-##====================================================================================
-
+```
+    ## Credit: Additional Features added by: WiseByDesign - Discord: wisebydesign
+```
 
 ## Commands
 
