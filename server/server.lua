@@ -1,5 +1,15 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-local CurrentWeather = Config.StartWeather
+local currentDateMonth = tonumber(os.date('%m'))
+if Config.OnlySnowInDecember then
+    if (currentDateMonth == 12) then
+        startUpWeather = 'XMAS'
+    else
+        startUpWeather = Config.StartWeather
+    end
+else
+    startUpWeather = Config.StartWeather
+end
+local CurrentWeather = startUpWeather
 local baseTime = Config.BaseTime
 local timeOffset = Config.TimeOffset
 local freezeTime = Config.FreezeTime
@@ -34,20 +44,43 @@ end
 
 --- Triggers event to switch weather to next stage
 local function nextWeatherStage()
-    if CurrentWeather == "CLEAR" or CurrentWeather == "CLOUDS" or CurrentWeather == "EXTRASUNNY" then
-        CurrentWeather = (math.random(1, 5) > 2) and "CLEARING" or "OVERCAST" -- 60/40 chance
-    elseif CurrentWeather == "CLEARING" or CurrentWeather == "OVERCAST" then
-        local new = math.random(1, 6)
-        if new == 1 then CurrentWeather = (CurrentWeather == "CLEARING") and "FOGGY" or "RAIN"
-        elseif new == 2 then CurrentWeather = "CLOUDS"
-        elseif new == 3 then CurrentWeather = "CLEAR"
-        elseif new == 4 then CurrentWeather = "EXTRASUNNY"
-        elseif new == 5 then CurrentWeather = "SMOG"
-        else CurrentWeather = "FOGGY"
+    math.randomseed(os.time())
+    if Config.OnlySnowInDecember then
+        if (currentDateMonth == 12) then
+            CurrentWeather = 'XMAS'
+        else
+            if CurrentWeather == "CLEAR" or CurrentWeather == "CLOUDS" or CurrentWeather == "EXTRASUNNY" then
+                CurrentWeather = (math.random(1, 5) > 2) and "CLEARING" or "OVERCAST" -- 60/40 chance
+            elseif CurrentWeather == "CLEARING" or CurrentWeather == "OVERCAST" then
+                local new = math.random(1, 6)
+                if new == 1 then CurrentWeather = (CurrentWeather == "CLEARING") and "FOGGY" or "RAIN"
+                elseif new == 2 then CurrentWeather = "CLOUDS"
+                elseif new == 3 then CurrentWeather = "CLEAR"
+                elseif new == 4 then CurrentWeather = "EXTRASUNNY"
+                elseif new == 5 then CurrentWeather = "SMOG"
+                else CurrentWeather = "FOGGY"
+                end
+            elseif CurrentWeather == "THUNDER" or CurrentWeather == "RAIN" then CurrentWeather = "CLEARING"
+            elseif CurrentWeather == "SMOG" or CurrentWeather == "FOGGY" then CurrentWeather = "CLEAR"
+            else CurrentWeather = "CLEAR"
+            end
         end
-    elseif CurrentWeather == "THUNDER" or CurrentWeather == "RAIN" then CurrentWeather = "CLEARING"
-    elseif CurrentWeather == "SMOG" or CurrentWeather == "FOGGY" then CurrentWeather = "CLEAR"
-    else CurrentWeather = "CLEAR"
+    else
+        if CurrentWeather == "CLEAR" or CurrentWeather == "CLOUDS" or CurrentWeather == "EXTRASUNNY" then
+            CurrentWeather = (math.random(1, 5) > 2) and "CLEARING" or "OVERCAST" -- 60/40 chance
+        elseif CurrentWeather == "CLEARING" or CurrentWeather == "OVERCAST" then
+            local new = math.random(1, 6)
+            if new == 1 then CurrentWeather = (CurrentWeather == "CLEARING") and "FOGGY" or "RAIN"
+            elseif new == 2 then CurrentWeather = "CLOUDS"
+            elseif new == 3 then CurrentWeather = "CLEAR"
+            elseif new == 4 then CurrentWeather = "EXTRASUNNY"
+            elseif new == 5 then CurrentWeather = "SMOG"
+            else CurrentWeather = "FOGGY"
+            end
+        elseif CurrentWeather == "THUNDER" or CurrentWeather == "RAIN" then CurrentWeather = "CLEARING"
+        elseif CurrentWeather == "SMOG" or CurrentWeather == "FOGGY" then CurrentWeather = "CLEAR"
+        else CurrentWeather = "CLEAR"
+        end
     end
     TriggerEvent("qb-weathersync:server:RequestStateSync")
 end
