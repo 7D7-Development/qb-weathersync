@@ -1,4 +1,14 @@
-local CurrentWeather = Config.StartWeather
+local currentDateMonth = GetClockMonth()
+if Config.OnlySnowInDecember then
+    if (currentDateMonth == 10) then
+        startUpWeather = 'XMAS'
+    else
+        startUpWeather = Config.StartWeather
+    end
+else
+    startUpWeather = Config.StartWeather
+end
+local CurrentWeather = startUpWeather
 local lastWeather = CurrentWeather
 local baseTime = Config.BaseTime
 local timeOffset = Config.TimeOffset
@@ -6,9 +16,13 @@ local freezeTime = Config.FreezeTime
 local blackout = Config.Blackout
 local blackoutVehicle = Config.BlackoutVehicle
 local disable = Config.Disabled
+local xmasVFXAssetName = 'core_snow'
+local xmasAudioBank = xmasVFXAssetName
+local xmasAudioBankIceSteps = 'ICE_FOOTSTEPS'
+local xmasAudioBankSnowSteps = 'SNOW_FOOTSTEPS'
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    disable = false
+    disable = Config.Disabled
     TriggerServerEvent('qb-weathersync:server:RequestStateSync')
 end)
 
@@ -40,12 +54,12 @@ end)
 CreateThread(function()
     while true do
         if not disable then
-            if lastWeather ~= CurrentWeather then
+            if (lastWeather ~= CurrentWeather) then
                 lastWeather = CurrentWeather
                 SetWeatherTypeOverTime(CurrentWeather, 15.0)
                 Wait(15000)
             end
-            Wait(100) -- Wait 0 seconds to prevent crashing.
+            Wait(100)
             SetArtificialLightsState(blackout)
             SetArtificialLightsStateAffectsVehicles(blackoutVehicle)
             ClearOverrideWeather()
@@ -53,16 +67,153 @@ CreateThread(function()
             SetWeatherTypePersist(lastWeather)
             SetWeatherTypeNow(lastWeather)
             SetWeatherTypeNowPersist(lastWeather)
-            if lastWeather == 'XMAS' then
+            if (lastWeather == 'XMAS') then
+                if Config.EnableExtraSnowSFX then
+                    RequestScriptAudioBank(xmasAudioBank, true, 0)
+                    RequestScriptAudioBank(xmasAudioBankIceSteps, true, 0)
+                    RequestScriptAudioBank(xmasAudioBankSnowSteps, true, 0)
+                end
+                if Config.EnableExtraSnowVFX then
+                    RequestNamedPtfxAsset(xmasVFXAssetName)
+                    Wait(100)
+                    UseParticleFxAsset(xmasVFXAssetName)
+                    ForceSnowPass(true)
+                end
                 SetForceVehicleTrails(true)
                 SetForcePedFootstepsTracks(true)
+                if Config.EnableXmasExtraVehicleDirtLevel then
+                    local xmasPlayer = PlayerPedId()
+                    local xmasVehicle = GetVehiclePedIsIn(xmasPlayer, false)
+                    local xmasVehicleStopped = IsVehicleStopped(xmasVehicle)
+                    local xmasVehicleDirtLevel = GetVehicleDirtLevel(xmasVehicle)
+                    local xmasVehicleSubmergedLevel = GetEntitySubmergedLevel(xmasVehicle)
+                    if (GetInteriorFromEntity(xmasVehicle) == 0) then
+                        if (xmasVehicleDirtLevel ~= 15.0) then
+                            if IsPedInAnyVehicle(xmasPlayer, false) then
+                                if DoesEntityExist(xmasVehicle) then
+                                    if xmasVehicleStopped then
+                                        if (xmasVehicleSubmergedLevel >= 0.2) then
+                                            Wait((Config.XmasExtraVehicleDirtLevelWaitTime / 2))
+                                            newXmasVehicleDirtLevel = (xmasVehicleDirtLevel - 0.3)
+                                            if ((newXmasVehicleDirtLevel >= 15.1) or (newXmasVehicleDirtLevel == 15.0)) then
+                                                newXmasVehicleDirtLevel = 14.9
+                                            elseif (newXmasVehicleDirtLevel <= 0.0) then
+                                                newXmasVehicleDirtLevel = 0.1
+                                            end
+                                            if ((newXmasVehicleDirtLevel < 15.1) and not (newXmasVehicleDirtLevel <= 0.0)) then
+                                                SetVehicleDirtLevel(xmasVehicle, newXmasVehicleDirtLevel)
+                                            end
+                                        else
+                                            Wait(Config.XmasExtraVehicleDirtLevelWaitTime)
+                                            newXmasVehicleDirtLevel = (xmasVehicleDirtLevel + 0.1)
+                                            if ((newXmasVehicleDirtLevel >= 15.1) or (newXmasVehicleDirtLevel == 15.0)) then
+                                                newXmasVehicleDirtLevel = 15.0
+                                            elseif (newXmasVehicleDirtLevel <= 0.0) then
+                                                newXmasVehicleDirtLevel = 0.1
+                                            end
+                                            if ((newXmasVehicleDirtLevel < 15.1) and not (newXmasVehicleDirtLevel <= 0.0)) then
+                                                SetVehicleDirtLevel(xmasVehicle, newXmasVehicleDirtLevel)
+                                            end
+                                        end
+                                    else
+                                        if (xmasVehicleSubmergedLevel >= 0.2) then
+                                            Wait((Config.XmasExtraVehicleDirtLevelWaitTime / 4))
+                                            newXmasVehicleDirtLevel = (xmasVehicleDirtLevel - 0.3)
+                                            if ((newXmasVehicleDirtLevel >= 15.1) or (newXmasVehicleDirtLevel == 15.0)) then
+                                                newXmasVehicleDirtLevel = 14.9
+                                            elseif (newXmasVehicleDirtLevel <= 0.0) then
+                                                newXmasVehicleDirtLevel = 0.1
+                                            end
+                                            if ((newXmasVehicleDirtLevel < 15.1) and not (newXmasVehicleDirtLevel <= 0.0)) then
+                                                SetVehicleDirtLevel(xmasVehicle, newXmasVehicleDirtLevel)
+                                            end
+                                        else
+                                            Wait((Config.XmasExtraVehicleDirtLevelWaitTime / 1.5))
+                                            newXmasVehicleDirtLevel = (xmasVehicleDirtLevel + 0.2)
+                                            if ((newXmasVehicleDirtLevel >= 15.1) or (newXmasVehicleDirtLevel == 15.0)) then
+                                                newXmasVehicleDirtLevel = 15.0
+                                            elseif (newXmasVehicleDirtLevel <= 0.0) then
+                                                newXmasVehicleDirtLevel = 0.1
+                                            end
+                                            if ((newXmasVehicleDirtLevel < 15.1) and not (newXmasVehicleDirtLevel <= 0.0)) then
+                                                SetVehicleDirtLevel(xmasVehicle, newXmasVehicleDirtLevel)
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        elseif (xmasVehicleDirtLevel == 15.0) then
+                            if (xmasVehicleSubmergedLevel >= 0.2) then
+                                if xmasVehicleStopped then
+                                    Wait((Config.XmasExtraVehicleDirtLevelWaitTime / 2))
+                                    newXmasVehicleDirtLevel = (xmasVehicleDirtLevel - 0.3)
+                                    if ((newXmasVehicleDirtLevel >= 15.1) or (newXmasVehicleDirtLevel == 15.0)) then
+                                        newXmasVehicleDirtLevel = 14.9
+                                    elseif (newXmasVehicleDirtLevel <= 0.0) then
+                                        newXmasVehicleDirtLevel = 0.1
+                                    end
+                                    if ((newXmasVehicleDirtLevel < 15.1) and not (newXmasVehicleDirtLevel <= 0.0)) then
+                                        SetVehicleDirtLevel(xmasVehicle, newXmasVehicleDirtLevel)
+                                    end
+                                else
+                                    Wait((Config.XmasExtraVehicleDirtLevelWaitTime / 4))
+                                    newXmasVehicleDirtLevel = (xmasVehicleDirtLevel - 0.3)
+                                    if ((newXmasVehicleDirtLevel >= 15.1) or (newXmasVehicleDirtLevel == 15.0)) then
+                                        newXmasVehicleDirtLevel = 14.9
+                                    elseif (newXmasVehicleDirtLevel <= 0.0) then
+                                        newXmasVehicleDirtLevel = 0.1
+                                    end
+                                    if ((newXmasVehicleDirtLevel < 15.1) and not (newXmasVehicleDirtLevel <= 0.0)) then
+                                        SetVehicleDirtLevel(xmasVehicle, newXmasVehicleDirtLevel)
+                                    end
+                                end
+                            end
+                        end
+                    else
+                        if ((xmasVehicleDirtLevel < 3.6) or (xmasVehicleDirtLevel <= 0.0)) then end
+                        Wait((Config.XmasExtraVehicleDirtLevelWaitTime / 2))
+                        newXmasVehicleDirtLevel = (xmasVehicleDirtLevel - 0.1)
+                        if ((newXmasVehicleDirtLevel < 3.6) or (newXmasVehicleDirtLevel <= 0.0)) then end
+                        if ((newXmasVehicleDirtLevel >= 15.1) or (newXmasVehicleDirtLevel == 15.0)) then
+                            newXmasVehicleDirtLevel = 14.9
+                        end
+                        if ((newXmasVehicleDirtLevel < 15.1) and not (newXmasVehicleDirtLevel <= 3.5) and not (newXmasVehicleDirtLevel <= 0.0)) then
+                            SetVehicleDirtLevel(xmasVehicle, newXmasVehicleDirtLevel)
+                        end
+                    end
+                end
+                if Config.EnableIceInWater then
+                    N_0xc54a08c85ae4d410(3.0)
+                end
+                if Config.UseFrozenLake then
+                    if (GetResourceState(Config.FrozenLakeResourceName) ~= 'missing') then
+                        RequestIpl(Config.FrozenLakeIPLName)
+                    end
+                end
             else
+                if Config.EnableExtraSnowVFX then
+                    RemoveNamedPtfxAsset(xmasVFXAssetName)
+                    ForceSnowPass(false)
+                end
                 SetForceVehicleTrails(false)
                 SetForcePedFootstepsTracks(false)
+                if Config.EnableExtraSnowSFX then
+                    ReleaseNamedScriptAudioBank(xmasAudioBank)
+                    ReleaseNamedScriptAudioBank(xmasAudioBankIceSteps)
+                    ReleaseNamedScriptAudioBank(xmasAudioBankSnowSteps)
+                end
+                if Config.EnableIceInWater then
+                    N_0xc54a08c85ae4d410(0.0)
+                end
+                if Config.UseFrozenLake then
+                    if IsIplActive(Config.FrozenLakeIPLName) then
+                        RemoveIpl(Config.FrozenLakeIPLName)
+                    end
+                end
             end
-            if lastWeather == 'RAIN' then
+            if (lastWeather == 'RAIN') then
                 SetRainLevel(0.3)
-            elseif lastWeather == 'THUNDER' then
+            elseif (lastWeather == 'THUNDER') then
                 SetRainLevel(0.5)
             else
                 SetRainLevel(0.0)
